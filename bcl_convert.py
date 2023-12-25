@@ -81,17 +81,17 @@ def run_bclconvert(rfpath: str):
     """
     rf = os.path.basename(rfpath)
 
-    if not is_recent_run(rfpath, n=24):  # 24
+    if not is_recent_run(rfpath, n=24):  # 24 h
         print(f'INFO: {rf}: Run is not recent or valid')
         return
 
     # print(f'INFO: {rf}: Run recent_Checking if run is complete...')
-    if not is_run_complete(rfpath, n=300):  # 300
+    if not is_run_complete(rfpath, n=3):  # 300 s
         print(f'INFO: {rf}: Run has not completed yet')
         return
 
     # print(f'INFO: {rf}: Checking if basecall conversion complete...')
-    if is_b2f_complete(rfpath, n=20):  # 20
+    if is_b2f_complete(rfpath, n=20):  # 20 s
         print(f'INFO: {rf}: Basecall conversion already completed')
         return
 
@@ -104,9 +104,10 @@ def run_bclconvert(rfpath: str):
     bcl_convert(rfpath)
 
     # Wait until the conversion completes on a detached process
-    sleep(120)  # 120
+    print(f'INFO: {rf}: Waiting for basecall conversion to complete')
+    sleep(300)  # 300 s
 
-    if is_b2f_complete(rfpath, n=20):  # 20
+    if is_b2f_complete(rfpath, n=20):  # 20 s
         print(f'INFO: {rf}: Basecall conversion completed')
 
         # Copy the `IndexMetricsOut.bin` file
